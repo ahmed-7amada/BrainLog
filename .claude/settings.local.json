@@ -1,7 +1,29 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(git fetch:*)",
+      "Bash(if [ -d specs ])",
+      "Bash(then ls -1 specs)",
+      "Bash(fi)",
+      "Bash(bash:*)",
+      "Bash(.specify/scripts/bash/check-prerequisites.sh:*)",
+      "Bash(.specify/scripts/bash/setup-plan.sh:*)",
+      "Bash(.specify/scripts/bash/update-agent-context.sh:*)",
+      "Bash(if [ -d \"D:/BrainLog/specs/001-learntracker-app/checklists\" ])",
+      "Bash(then echo \"Checklists directory exists\")",
+      "Bash(else echo \"No checklists directory found\")",
+      "Bash(node:*)",
+      "Bash(npm --version:*)",
+      "Bash(git --version:*)",
+      "Bash(if [ -f \"package.json\" ])",
+      "Bash(then echo \"package.json exists\")",
+      "Bash(else echo \"No package.json found - React Native project not initialized\")",
+      "Bash(npx react-native@latest:*)",
+      "Bash(npm install)",
+      "Bash(tee:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }
