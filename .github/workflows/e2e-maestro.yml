@@ -47,16 +47,18 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: |
             # Build Android app
-            cd android && chmod +x gradlew && ./gradlew assembleDebug
+            cd android && chmod +x gradlew && ./gradlew assembleDebug && cd ..
 
-            # Install app on emulator
-            adb install app/build/outputs/apk/debug/app-debug.apk
+            # Find and install APK
+            APK=$(find android -name "*.apk" -path "*/debug/*" | head -1)
+            echo "Installing APK: $APK"
+            adb install "$APK"
 
             # Wait for app to be ready
             sleep 10
 
             # Run Maestro tests
-            maestro test ../.maestro/suite.yaml --format junit --output maestro-results.xml
+            maestro test .maestro/suite.yaml --format junit --output maestro-results.xml
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
