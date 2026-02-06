@@ -28,7 +28,9 @@
       "Bash(gh pr create:*)",
       "Bash(git push:*)",
       "Bash(gh repo edit:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)"
     ]
   }
 }
