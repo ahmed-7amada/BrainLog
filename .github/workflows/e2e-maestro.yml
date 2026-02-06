@@ -9,7 +9,7 @@ on:
 
 jobs:
   maestro-e2e:
-    runs-on: macos-13  # macos-13 has x86_64 support, macos-14+ is ARM64 only
+    runs-on: macos-15-intel  # Intel runner for x86_64 emulator support
     timeout-minutes: 60
 
     steps:
