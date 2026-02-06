@@ -48,7 +48,7 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: |
             # Build Android app
-            cd android && ./gradlew assembleDebug
+            cd android && chmod +x gradlew && ./gradlew assembleDebug
 
             # Install app on emulator
             adb install app/build/outputs/apk/debug/app-debug.apk
