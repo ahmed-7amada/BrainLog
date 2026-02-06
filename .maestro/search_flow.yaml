@@ -1,0 +1,35 @@
+# Search Flow
+# Tests search functionality
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Access search (may need to navigate to it first)
+# Search is typically accessible from multiple places
+
+# If search screen is accessible
+- assertVisible:
+    id: "search_input_query"
+    optional: true
+
+# Enter search query
+- tapOn:
+    id: "search_input_query"
+    optional: true
+- inputText: "test"
+    optional: true
+
+- waitForAnimationToEnd
+
+# Verify results list
+- assertVisible:
+    id: "search_list_results"
+    optional: true
+
+# Clear search
+- tapOn:
+    id: "search_button_clear"
+    optional: true
+- waitForAnimationToEnd

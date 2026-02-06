@@ -1,0 +1,39 @@
+# Note CRUD Flow
+# Tests create, read, update, delete operations for notes
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Notes tab
+- tapOn:
+    text: "Notes"
+- waitForAnimationToEnd
+
+# CREATE: Tap create button
+- tapOn:
+    id: "noteList_button_create"
+- waitForAnimationToEnd
+
+# Fill in note details
+- tapOn:
+    id: "createNote_input_title"
+- inputText: "Test Note Title"
+
+- tapOn:
+    id: "createNote_input_content"
+- inputText: "This is test note content for E2E testing."
+
+# Save the note
+- tapOn:
+    id: "createNote_button_save"
+- waitForAnimationToEnd
+
+# Should return to note list
+- assertVisible:
+    id: "noteList_list_notes"
+
+# Verify note appears in list
+- assertVisible:
+    text: "Test Note Title"

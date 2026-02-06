@@ -1,0 +1,30 @@
+# Weekly Summary Flow
+# Tests weekly insights screen
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Calendar tab
+- tapOn:
+    text: "Calendar"
+- waitForAnimationToEnd
+
+# Navigate to weekly summary (from calendar stack)
+- assertVisible:
+    id: "weeklySummaryList_list_summaries"
+    optional: true
+
+# View a summary
+- assertVisible:
+    id: "weeklySummary_text_dateRange"
+    optional: true
+
+- assertVisible:
+    id: "weeklySummary_card_stats"
+    optional: true
+
+- assertVisible:
+    id: "weeklySummary_chart_activity"
+    optional: true

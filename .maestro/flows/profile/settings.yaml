@@ -1,0 +1,31 @@
+# Settings Flow
+# Tests settings screen functionality
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Profile > Settings
+- tapOn:
+    text: "Profile"
+- waitForAnimationToEnd
+
+- tapOn:
+    id: "profile_button_settings"
+- waitForAnimationToEnd
+
+# Verify settings elements
+- assertVisible:
+    id: "settings_toggle_notifications"
+
+- assertVisible:
+    id: "settings_toggle_darkMode"
+
+# Go back
+- back
+- waitForAnimationToEnd
+
+# Should be back on profile
+- assertVisible:
+    id: "profile_text_username"

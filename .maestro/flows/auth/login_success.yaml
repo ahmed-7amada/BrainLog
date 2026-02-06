@@ -1,0 +1,22 @@
+# Login Success Flow
+# Tests successful Google Sign-In authentication
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Verify login screen is displayed
+- assertVisible:
+    id: "login_text_title"
+
+# Tap Google Sign-In button
+- tapOn:
+    id: "login_button_googleSignIn"
+
+- waitForAnimationToEnd
+
+# After successful login, should see dashboard
+- assertVisible:
+    id: "dashboard_text_greeting"
+    timeout: 10000

@@ -1,0 +1,39 @@
+# Flashcard CRUD Flow
+# Tests create, read operations for flashcards
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Flashcards tab
+- tapOn:
+    text: "Cards"
+- waitForAnimationToEnd
+
+# Verify list is visible
+- assertVisible:
+    id: "flashcardList_list_cards"
+
+# CREATE: Tap create button
+- tapOn:
+    id: "flashcardList_button_create"
+- waitForAnimationToEnd
+
+# Fill in flashcard details
+- tapOn:
+    id: "createFlashcard_input_front"
+- inputText: "What is E2E testing?"
+
+- tapOn:
+    id: "createFlashcard_input_back"
+- inputText: "End-to-end testing validates entire user flows."
+
+# Save the flashcard
+- tapOn:
+    id: "createFlashcard_button_save"
+- waitForAnimationToEnd
+
+# Should return to flashcard list
+- assertVisible:
+    id: "flashcardList_list_cards"

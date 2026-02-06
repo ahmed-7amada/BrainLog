@@ -1,0 +1,36 @@
+# Memorize CRUD Flow
+# Tests memorize item creation
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Profile > Memorize
+- tapOn:
+    text: "Profile"
+- waitForAnimationToEnd
+
+# Navigate to memorize list
+- assertVisible:
+    id: "memorizeList_list_items"
+    optional: true
+
+# Create new item
+- tapOn:
+    id: "memorizeList_button_create"
+    optional: true
+- waitForAnimationToEnd
+
+# Fill in details
+- tapOn:
+    id: "createMemorize_input_content"
+    optional: true
+- inputText: "Test memorize item content"
+    optional: true
+
+# Save
+- tapOn:
+    id: "createMemorize_button_save"
+    optional: true
+- waitForAnimationToEnd

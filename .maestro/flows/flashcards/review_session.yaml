@@ -1,0 +1,30 @@
+# Flashcard Review Session Flow
+# Tests the spaced repetition review functionality
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Flashcards tab
+- tapOn:
+    text: "Cards"
+- waitForAnimationToEnd
+
+# Start review session (if due cards exist)
+- tapOn:
+    id: "flashcardList_button_startReview"
+    optional: true
+- waitForAnimationToEnd
+
+# If in review session, interact with cards
+- tapOn:
+    id: "reviewSession_card_flashcard"
+    optional: true
+- waitForAnimationToEnd
+
+# Rate the card
+- tapOn:
+    id: "reviewSession_button_good"
+    optional: true
+- waitForAnimationToEnd

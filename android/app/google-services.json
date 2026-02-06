@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "702972693575",
+    "firebase_url": "https://brainlogapp-default-rtdb.firebaseio.com",
+    "project_id": "brainlogapp",
+    "storage_bucket": "brainlogapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702972693575:android:ba2a12bf3b439198faf562",
+        "android_client_info": {
+          "package_name": "com.brainlog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "702972693575-h7a7ndnqdu0il7rv38mc41arkf2igkbc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpTVlE9k1gpOhM-GB7FiFykTtPgdENZqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "702972693575-h7a7ndnqdu0il7rv38mc41arkf2igkbc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

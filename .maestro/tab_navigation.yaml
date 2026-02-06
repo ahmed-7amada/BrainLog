@@ -1,0 +1,46 @@
+# Tab Navigation Flow
+# Tests navigation between all main tabs
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Should start on Dashboard
+- assertVisible:
+    id: "dashboard_text_greeting"
+
+# Navigate to Flashcards tab
+- tapOn:
+    text: "Cards"
+- waitForAnimationToEnd
+- assertVisible:
+    id: "flashcardList_list_cards"
+
+# Navigate to Notes tab
+- tapOn:
+    text: "Notes"
+- waitForAnimationToEnd
+- assertVisible:
+    id: "noteList_list_notes"
+
+# Navigate to Calendar tab
+- tapOn:
+    text: "Calendar"
+- waitForAnimationToEnd
+- assertVisible:
+    id: "calendar_calendar_main"
+
+# Navigate to Profile tab
+- tapOn:
+    text: "Profile"
+- waitForAnimationToEnd
+- assertVisible:
+    id: "profile_text_username"
+
+# Navigate back to Home
+- tapOn:
+    text: "Home"
+- waitForAnimationToEnd
+- assertVisible:
+    id: "dashboard_text_greeting"

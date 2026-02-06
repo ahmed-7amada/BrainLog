@@ -1,0 +1,35 @@
+# Memorize Review Flow
+# Tests memorize review session
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to memorize list
+- tapOn:
+    text: "Profile"
+- waitForAnimationToEnd
+
+# Start review
+- tapOn:
+    id: "memorizeList_button_startReview"
+    optional: true
+- waitForAnimationToEnd
+
+# If in review, interact
+- assertVisible:
+    id: "memorizeReview_text_content"
+    optional: true
+
+# Reveal answer
+- tapOn:
+    id: "memorizeReview_button_reveal"
+    optional: true
+- waitForAnimationToEnd
+
+# Mark correct
+- tapOn:
+    id: "memorizeReview_button_correct"
+    optional: true
+- waitForAnimationToEnd

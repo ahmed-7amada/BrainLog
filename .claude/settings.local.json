@@ -1,7 +1,37 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dir:*)"
+      "Bash(grep:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx eslint:*)",
+      "Bash(powershell:*)",
+      "Bash(if not exist \"D:\\\\BrainLog\\\\specs\\\\001-brainlog-app\\\\checklists\" mkdir \"D:\\\\BrainLog\\\\specs\\\\001-brainlog-app\\\\checklists\")",
+      "Bash(git fetch:*)",
+      "Bash(ls:*)",
+      "Bash(dir:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:npm.io)",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(git checkout:*)",
+      "Bash(findstr:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npm install:*)",
+      "Bash(npx depcheck:*)",
+      "Bash(cd:*)",
+      "Bash(npm run format:check:*)",
+      "Bash(npm run format:*)",
+      "Bash(./gradlew tasks:*)",
+      "Bash(gh repo create:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: Android-only cleanup with Maestro E2E testing\n\n- Enable TypeScript strict mode with zero errors\n- Fix all ESLint warnings/errors\n- Format all files with Prettier\n- Remove iOS platform completely \\(ios/ directory, configs, Platform.OS conditionals\\)\n- Add testIDs to all 38 screens \\(144 testID attributes\\)\n- Create 21 Maestro E2E test flows\n- Add GitHub Actions CI/CD workflows\n- Update constitution to v1.1.0\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(gh pr create:*)",
+      "Bash(git push:*)",
+      "Bash(gh repo edit:*)",
+      "Bash(git commit:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh run cancel:*)"
     ]
   }
 }
