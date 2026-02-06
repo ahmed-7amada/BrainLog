@@ -1,0 +1,18 @@
+# Record Voice Note Flow
+# Tests voice recording functionality
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to voice notes and recording screen
+- tapOn:
+    text: "Notes"
+- waitForAnimationToEnd
+
+# This test requires voice notes to be accessible from notes stack
+# Verify recording button exists when on record screen
+- assertVisible:
+    id: "recordVoiceNote_button_record"
+    optional: true

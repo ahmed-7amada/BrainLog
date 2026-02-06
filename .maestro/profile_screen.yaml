@@ -1,0 +1,32 @@
+# Profile Screen Flow
+# Tests profile screen elements and navigation
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Profile tab
+- tapOn:
+    text: "Profile"
+- waitForAnimationToEnd
+
+# Verify profile elements are visible
+- assertVisible:
+    id: "profile_text_username"
+
+- assertVisible:
+    id: "profile_text_level"
+
+- assertVisible:
+    id: "profile_card_stats"
+
+# Verify menu buttons are visible
+- assertVisible:
+    id: "profile_button_settings"
+
+- assertVisible:
+    id: "profile_button_badges"
+
+- assertVisible:
+    id: "profile_button_statistics"

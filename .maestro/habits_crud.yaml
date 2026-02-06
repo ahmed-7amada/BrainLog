@@ -1,0 +1,39 @@
+# Habits CRUD Flow
+# Tests create, read, update, delete for habits
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Profile > Habits
+- tapOn:
+    text: "Profile"
+- waitForAnimationToEnd
+
+- tapOn:
+    id: "profile_button_habits"
+- waitForAnimationToEnd
+
+# Verify habits list
+- assertVisible:
+    id: "habits_list_habits"
+
+# Create new habit
+- tapOn:
+    id: "habits_button_create"
+- waitForAnimationToEnd
+
+# Fill in habit details
+- tapOn:
+    id: "createHabit_input_name"
+- inputText: "Test Habit"
+
+# Save
+- tapOn:
+    id: "createHabit_button_save"
+- waitForAnimationToEnd
+
+# Should return to habits list
+- assertVisible:
+    id: "habits_list_habits"

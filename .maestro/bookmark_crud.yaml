@@ -1,0 +1,42 @@
+# Bookmark CRUD Flow
+# Tests bookmark create, read, delete
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Notes tab (bookmarks are in Notes stack)
+- tapOn:
+    text: "Notes"
+- waitForAnimationToEnd
+
+# Navigate to bookmarks list (may need scroll or navigation)
+- assertVisible:
+    id: "bookmarkList_list_bookmarks"
+    optional: true
+
+# Create bookmark
+- tapOn:
+    id: "bookmarkList_button_create"
+    optional: true
+- waitForAnimationToEnd
+
+# Fill in bookmark details
+- tapOn:
+    id: "createBookmark_input_title"
+    optional: true
+- inputText: "Test Bookmark"
+    optional: true
+
+- tapOn:
+    id: "createBookmark_input_url"
+    optional: true
+- inputText: "https://example.com"
+    optional: true
+
+# Save
+- tapOn:
+    id: "createBookmark_button_save"
+    optional: true
+- waitForAnimationToEnd

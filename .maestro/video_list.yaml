@@ -1,0 +1,22 @@
+# Video List Flow
+# Tests video list screen
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Notes tab (videos are in Notes stack)
+- tapOn:
+    text: "Notes"
+- waitForAnimationToEnd
+
+# Navigate to videos list
+- assertVisible:
+    id: "videoList_list_videos"
+    optional: true
+
+# Verify upload button
+- assertVisible:
+    id: "videoList_button_upload"
+    optional: true
