@@ -1,13 +1,15 @@
 name: Maestro E2E Tests
 
 on:
+  push:
+    branches: [master, main, develop]
+  pull_request:
+    branches: [master, main]
   workflow_dispatch:
-    # Manual trigger only - emulators don't work reliably on GitHub Actions
-    # Run locally or use a dedicated device farm for E2E tests
 
 jobs:
   maestro-e2e:
-    runs-on: macos-latest
+    runs-on: macos-13  # macos-13 has x86_64 support, macos-14+ is ARM64 only
     timeout-minutes: 60
 
     steps:
