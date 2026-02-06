@@ -47,7 +47,7 @@ jobs:
           emulator-boot-timeout: 900
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -memory 2048
           script: |
-            cd android && chmod +x gradlew && ./gradlew assembleDebug && cd .. && adb install android/app/build/outputs/apk/debug/app-debug.apk && sleep 10 && maestro test .maestro/suite.yaml --format junit --output maestro-results.xml
+            cd android && chmod +x gradlew && ./gradlew assembleDebug && cd .. && adb install android/app/build/outputs/apk/debug/app-debug.apk && sleep 10 && maestro test .maestro/flows/ --format junit --output maestro-results.xml
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
