@@ -10,7 +10,7 @@ on:
 jobs:
   maestro-e2e:
     runs-on: macos-15-intel  # Intel runner for x86_64 emulator support
-    timeout-minutes: 60
+    timeout-minutes: 90
 
     steps:
       - name: Checkout code
