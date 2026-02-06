@@ -1,39 +1,85 @@
 /**
  * Flashcard Model
- * Represents a single learning card with SM-2 spaced repetition parameters
+ * Represents a single learning card for spaced repetition (FR-001 through FR-009)
  */
+
+import type { SyncState } from './SyncState';
 
 export interface Flashcard {
   id: string;
-  user_id: string;
-  front_text: string; // Question/prompt
-  back_text: string; // Answer/explanation
-  deck: string; // Deck name/category
-  tags: string[]; // Category tags
-  voice_note_id?: string; // Optional attached voice note
+  userId: string;
+  frontText: string;
+  backText: string;
+  deck?: string;
+  tags: string[];
+  voiceNoteId?: string;
 
-  // SM-2 Algorithm Parameters
-  ease_factor: number; // Difficulty multiplier (min 1.3, initial 2.5)
-  interval: number; // Days until next review
-  repetitions: number; // Number of successful reviews
-  next_review_date: string; // YYYY-MM-DD
-  last_review_date: string; // YYYY-MM-DD
-  last_quality_rating: number; // 0, 3, 4, or 5
+  // SM-2 algorithm parameters
+  easeFactor: number; // default: 2.5, min: 1.3
+  interval: number; // days until next review, default: 1
+  repetitions: number; // successful reviews count, default: 0
+  nextReviewDate: string; // ISO date YYYY-MM-DD
+  lastReviewDate?: string; // ISO date YYYY-MM-DD
+  lastQualityRating?: QualityRating;
 
   // Statistics
-  total_reviews: number;
-  correct_reviews: number; // Quality >= 3
-  incorrect_reviews: number; // Quality == 0
+  totalReviews: number;
+  correctReviews: number; // quality >= 3
+  incorrectReviews: number; // quality == 0
 
-  created_at: number; // Timestamp
-  updated_at: number; // Timestamp
+  createdAt: number; // timestamp
+  updatedAt: number; // timestamp
+
+  // Feature 003: Sync metadata
+  syncState?: SyncState;
+  _optimistic?: boolean;
 }
 
-export interface FlashcardReviewResult {
-  flashcard_id: string;
-  quality_rating: 0 | 3 | 4 | 5; // Again, Hard, Good, Easy
-  new_ease_factor: number;
-  new_interval: number;
-  new_repetitions: number;
-  next_review_date: string;
+// Quality ratings per FR-004
+export type QualityRating = 0 | 3 | 4 | 5;
+
+export const QUALITY_LABELS: Record<QualityRating, string> = {
+  0: 'Again',
+  3: 'Hard',
+  4: 'Good',
+  5: 'Easy',
+};
+
+export interface CreateFlashcardInput {
+  frontText: string;
+  backText: string;
+  deck?: string;
+  tags?: string[];
+  voiceNoteId?: string;
 }
+
+export const createFlashcard = (input: CreateFlashcardInput, userId: string): Flashcard => {
+  const today = new Date().toISOString().split('T')[0];
+  return {
+    id: generateId(),
+    userId,
+    frontText: input.frontText,
+    backText: input.backText,
+    deck: input.deck,
+    tags: input.tags || [],
+    voiceNoteId: input.voiceNoteId,
+    easeFactor: 2.5,
+    interval: 1,
+    repetitions: 0,
+    nextReviewDate: today, // Due immediately for first review
+    totalReviews: 0,
+    correctReviews: 0,
+    incorrectReviews: 0,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  };
+};
+
+// Simple UUID generator
+const generateId = (): string => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};

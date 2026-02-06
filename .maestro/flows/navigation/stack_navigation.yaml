@@ -1,0 +1,27 @@
+# Stack Navigation Flow
+# Tests push/pop navigation within stacks
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Notes tab
+- tapOn:
+    text: "Notes"
+- waitForAnimationToEnd
+
+# Tap create note button to push new screen
+- tapOn:
+    id: "noteList_button_create"
+- waitForAnimationToEnd
+- assertVisible:
+    id: "createNote_input_title"
+
+# Go back using hardware back button
+- back
+- waitForAnimationToEnd
+
+# Should be back on note list
+- assertVisible:
+    id: "noteList_list_notes"

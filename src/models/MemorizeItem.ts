@@ -1,26 +1,63 @@
 /**
  * Memorize Item Model
- * Represents any content registered for spaced repetition review
+ * Represents any content registered for spaced repetition review (FR-045 through FR-049)
  */
+
+import type { QualityRating } from './Flashcard';
+
+export type MemorizeItemType = 'note' | 'concept' | 'vocabulary' | 'custom';
 
 export interface MemorizeItem {
   id: string;
-  user_id: string;
+  userId: string;
   title: string;
-  content_summary: string;
+  contentSummary: string;
   type: MemorizeItemType;
-  source_reference?: string; // Link to original note or flashcard
+  sourceReferenceType?: string;
+  sourceReferenceId?: string;
   tags: string[];
 
-  // SM-2 Algorithm Parameters (same as Flashcard)
-  ease_factor: number; // Min 1.3, initial 2.5
-  interval: number; // Days until next review
+  // SM-2 algorithm parameters (same as Flashcard)
+  easeFactor: number;
+  interval: number;
   repetitions: number;
-  next_review_date: string; // YYYY-MM-DD
-  last_review_date: string; // YYYY-MM-DD
-  last_quality_rating: number; // 0, 3, 4, or 5
+  nextReviewDate: string; // ISO date YYYY-MM-DD
+  lastReviewDate?: string;
+  lastQualityRating?: QualityRating;
 
-  created_at: number; // Timestamp
+  createdAt: number;
+  updatedAt: number;
 }
 
-export type MemorizeItemType = 'note' | 'concept' | 'vocabulary' | 'custom';
+export interface CreateMemorizeItemInput {
+  userId: string;
+  title: string;
+  contentSummary: string;
+  type: MemorizeItemType;
+  sourceReferenceType?: string;
+  sourceReferenceId?: string;
+  tags?: string[];
+}
+
+export const createMemorizeItem = (input: CreateMemorizeItemInput): MemorizeItem => {
+  const today = new Date().toISOString().split('T')[0];
+  return {
+    id: generateId(),
+    ...input,
+    tags: input.tags || [],
+    easeFactor: 2.5,
+    interval: 1,
+    repetitions: 0,
+    nextReviewDate: today,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  };
+};
+
+const generateId = (): string => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};

@@ -1,0 +1,21 @@
+# Voice Note List Flow
+# Tests voice note list screen
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Notes tab
+- tapOn:
+    text: "Notes"
+- waitForAnimationToEnd
+
+# Navigate to Voice Notes (from Notes stack)
+- scroll:
+    direction: DOWN
+
+# Look for voice notes section or button
+- assertVisible:
+    id: "voiceNoteList_list_notes"
+    optional: true

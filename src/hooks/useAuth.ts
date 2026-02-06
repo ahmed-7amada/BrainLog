@@ -1,94 +1,135 @@
 /**
  * useAuth Hook
- * Provides authentication state and methods throughout the app
+ * Authentication state and operations
  */
 
-import {useState, useEffect} from 'react';
-import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import { useEffect, useCallback } from 'react';
+import { useStore } from '../store';
 import {
   signInWithGoogle,
   signOut,
-  getCurrentUser,
-  isAuthenticated,
   onAuthStateChanged,
-  deleteAccount,
-} from '@/services/firebase/authService';
+  configureGoogleSignIn,
+} from '../services/firebase/authService';
+import { getUserRef, get, child } from '../config/firebase';
+import type { User } from '../models/User';
 
-export interface UseAuthReturn {
-  user: FirebaseAuthTypes.User | null;
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  signIn: () => Promise<void>;
-  signOut: () => Promise<void>;
-  deleteAccount: () => Promise<void>;
-  error: string | null;
-}
+export const useAuth = () => {
+  const {
+    user,
+    isLoading,
+    isAuthenticated,
+    error,
+    setUser,
+    setLoading,
+    setError,
+    updateUser,
+    logout: storeLogout,
+  } = useStore();
 
-export const useAuth = (): UseAuthReturn => {
-  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(
-    getCurrentUser(),
-  );
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // Initialize Google Sign-In on mount
+  useEffect(() => {
+    configureGoogleSignIn();
+  }, []);
 
   // Listen to auth state changes
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(firebaseUser => {
-      setUser(firebaseUser);
+    const unsubscribe = onAuthStateChanged(async firebaseUser => {
+      if (firebaseUser) {
+        try {
+          // Load full user profile from database
+          const userRef = getUserRef(firebaseUser.uid);
+          const profileRef = child(userRef, 'profile');
+          const snapshot = await get(profileRef);
+          const userData = snapshot.val();
+
+          if (userData) {
+            setUser({
+              id: firebaseUser.uid,
+              email: userData.email || firebaseUser.email || '',
+              name: userData.name || firebaseUser.displayName || 'User',
+              avatarUrl: userData.avatarUrl || firebaseUser.photoURL || undefined,
+              xpPoints: userData.xpPoints || 0,
+              currentLevel: userData.currentLevel || 1,
+              currentStreak: userData.currentStreak || 0,
+              longestStreak: userData.longestStreak || 0,
+              lastActiveDate: userData.lastActiveDate || new Date().toISOString().split('T')[0],
+              streakFreezeAvailable: userData.streakFreezeAvailable ?? true,
+              earnedBadges: userData.earnedBadges || [],
+              createdAt: userData.createdAt || Date.now(),
+              updatedAt: userData.updatedAt || Date.now(),
+            });
+          } else {
+            // New user - create profile
+            const newUser: User = {
+              id: firebaseUser.uid,
+              email: firebaseUser.email || '',
+              name: firebaseUser.displayName || 'User',
+              avatarUrl: firebaseUser.photoURL || undefined,
+              xpPoints: 0,
+              currentLevel: 1,
+              currentStreak: 0,
+              longestStreak: 0,
+              lastActiveDate: new Date().toISOString().split('T')[0],
+              streakFreezeAvailable: true,
+              earnedBadges: [],
+              createdAt: Date.now(),
+              updatedAt: Date.now(),
+            };
+            setUser(newUser);
+          }
+        } catch (loadError) {
+          console.error('Error loading user profile:', loadError);
+          setError('Failed to load user profile');
+        }
+      } else {
+        storeLogout();
+      }
+      setLoading(false);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [setUser, setLoading, setError, storeLogout]);
 
-  const signIn = async () => {
+  const login = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      setIsLoading(true);
-      setError(null);
-      const signedInUser = await signInWithGoogle();
-      setUser(signedInUser);
-    } catch (err: any) {
-      setError(err.message || 'Failed to sign in');
-      throw err;
+      const loggedInUser = await signInWithGoogle();
+      setUser(loggedInUser);
+      return loggedInUser;
+    } catch (loginError: unknown) {
+      const message = loginError instanceof Error ? loginError.message : 'Sign in failed';
+      setError(message);
+      throw loginError;
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
-  };
+  }, [setUser, setLoading, setError]);
 
-  const handleSignOut = async () => {
+  const logout = useCallback(async () => {
+    setLoading(true);
     try {
-      setIsLoading(true);
-      setError(null);
       await signOut();
-      setUser(null);
-    } catch (err: any) {
-      setError(err.message || 'Failed to sign out');
-      throw err;
+      storeLogout();
+    } catch (logoutError: unknown) {
+      const message = logoutError instanceof Error ? logoutError.message : 'Sign out failed';
+      setError(message);
+      throw logoutError;
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
-  };
-
-  const handleDeleteAccount = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      await deleteAccount();
-      setUser(null);
-    } catch (err: any) {
-      setError(err.message || 'Failed to delete account');
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, [storeLogout, setLoading, setError]);
 
   return {
     user,
     isLoading,
-    isAuthenticated: isAuthenticated(),
-    signIn,
-    signOut: handleSignOut,
-    deleteAccount: handleDeleteAccount,
+    isAuthenticated,
     error,
+    login,
+    logout,
+    updateUser,
   };
 };
+
+export default useAuth;

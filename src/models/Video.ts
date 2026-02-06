@@ -1,35 +1,51 @@
 /**
  * Video Model
- * Represents uploaded or recorded learning video with quality metadata
+ * Represents uploaded or recorded learning video (FR-012, FR-017)
  */
 
 export interface Video {
   id: string;
-  user_id: string;
+  userId: string;
   title: string;
   description?: string;
-
-  // External storage reference (Google Drive)
-  google_drive_file_id: string;
-  google_drive_url: string;
-
-  // Quality information
-  resolution: string; // e.g., "1920x1080"
-  bitrate: number; // bits per second
-  format: string; // e.g., "mp4"
-  duration_seconds: number;
-
-  // Size information
-  original_size_bytes: number;
-  compressed_size_bytes: number;
-
+  googleDriveFileId: string;
+  googleDriveUrl: string;
+  resolution?: string; // e.g., "1920x1080"
+  bitrate?: number; // bps
+  format?: string; // e.g., "h264"
+  durationSeconds: number;
+  originalSizeBytes: number;
+  compressedSizeBytes: number;
   tags: string[];
-  created_at: number; // Timestamp
+  createdAt: number;
 }
 
-export interface VideoCompressionOptions {
-  quality: 'low' | 'medium' | 'high';
-  maxWidth?: number;
-  maxHeight?: number;
+export interface CreateVideoInput {
+  title: string;
+  description?: string;
+  googleDriveFileId: string;
+  googleDriveUrl: string;
+  resolution?: string;
   bitrate?: number;
+  format?: string;
+  durationSeconds: number;
+  originalSizeBytes: number;
+  compressedSizeBytes: number;
+  tags?: string[];
 }
+
+export const createVideo = (input: CreateVideoInput, userId: string): Video => ({
+  id: generateId(),
+  userId,
+  ...input,
+  tags: input.tags || [],
+  createdAt: Date.now(),
+});
+
+const generateId = (): string => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};

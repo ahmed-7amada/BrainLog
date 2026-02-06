@@ -1,0 +1,26 @@
+# Calendar Navigation Flow
+# Tests calendar screen and date selection
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Calendar tab
+- tapOn:
+    text: "Calendar"
+- waitForAnimationToEnd
+
+# Verify calendar is visible
+- assertVisible:
+    id: "calendar_calendar_main"
+
+# Verify selected date is visible
+- assertVisible:
+    id: "calendar_text_selectedDate"
+
+# Tap today button if visible
+- tapOn:
+    id: "calendar_button_today"
+    optional: true
+- waitForAnimationToEnd

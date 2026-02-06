@@ -1,67 +1,130 @@
 /**
- * Navigation Types
- * TypeScript types for navigation params and screens
+ * Navigation Type Definitions
  */
 
-import type {NavigatorScreenParams} from '@react-navigation/native';
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import type {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import type { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 
-// Root Stack (top-level navigation)
-export type RootStackParamList = {
-  Auth: NavigatorScreenParams<AuthStackParamList>;
-  Main: NavigatorScreenParams<MainTabsParamList>;
-};
-
-// Auth Stack (authentication flow)
+// Auth Stack
 export type AuthStackParamList = {
   Login: undefined;
 };
 
-// Main Tabs (authenticated app)
-export type MainTabsParamList = {
+// Main Tab Navigator
+export type MainTabParamList = {
   Dashboard: undefined;
   Flashcards: NavigatorScreenParams<FlashcardsStackParamList>;
   Notes: NavigatorScreenParams<NotesStackParamList>;
-  Calendar: undefined;
-  Profile: undefined;
+  Calendar: NavigatorScreenParams<CalendarStackParamList>;
+  Profile: NavigatorScreenParams<ProfileStackParamList>;
 };
 
 // Flashcards Stack
 export type FlashcardsStackParamList = {
   FlashcardList: undefined;
-  CreateFlashcard: undefined;
-  FlashcardDetail: {flashcardId: string};
-  ReviewSession: undefined;
+  CreateFlashcard: { deckId?: string } | undefined;
+  EditFlashcard: { flashcardId: string };
+  FlashcardDetail: { flashcardId: string };
+  ReviewSession: { deckId?: string } | undefined;
+  ReviewComplete: {
+    cardsReviewed: number;
+    correctCount: number;
+    incorrectCount: number;
+    xpEarned: number;
+  };
 };
 
 // Notes Stack
 export type NotesStackParamList = {
   NoteList: undefined;
-  NoteEditor: {noteId?: string};
-  NoteDetail: {noteId: string};
+  CreateNote: { folderId?: string } | undefined;
+  EditNote: { noteId: string };
+  NoteDetail: { noteId: string };
+  // Bookmarks
+  BookmarkList: undefined;
+  CreateBookmark: undefined;
+  BookmarkDetail: { id: string };
+  // Videos
+  VideoList: undefined;
+  VideoDetail: { id: string };
+  UploadVideo: undefined;
+  // Voice Notes
+  VoiceNoteList: undefined;
+  VoiceNoteDetail: { id: string };
+  RecordVoiceNote: undefined;
 };
 
-// Screen props types for type-safe navigation
-export type RootStackScreenProps<T extends keyof RootStackParamList> =
-  NativeStackScreenProps<RootStackParamList, T>;
+// Calendar Stack
+export type CalendarStackParamList = {
+  CalendarView: undefined;
+  DayDetail: { dateKey: string };
+  DailyLog: { dateKey?: string } | undefined;
+  WeeklySummary: { weekKey?: string } | undefined;
+  WeeklySummaryList: undefined;
+  WeeklySummaryDetail: { weekKey: string };
+};
 
-export type AuthStackScreenProps<T extends keyof AuthStackParamList> =
-  NativeStackScreenProps<AuthStackParamList, T>;
+// Profile Stack
+export type ProfileStackParamList = {
+  ProfileMain: undefined;
+  Settings: undefined;
+  Badges: undefined;
+  Statistics: undefined;
+  Habits: undefined;
+  CreateHabit: undefined;
+  EditHabit: { habitId: string };
+  // Memorize
+  MemorizeList: undefined;
+  MemorizeDetail: { id: string };
+  MemorizeReview: undefined;
+  CreateMemorizeItem: undefined;
+};
 
-export type MainTabsScreenProps<T extends keyof MainTabsParamList> =
-  BottomTabScreenProps<MainTabsParamList, T>;
+// Root Navigator
+export type RootStackParamList = {
+  Auth: NavigatorScreenParams<AuthStackParamList>;
+  Main: NavigatorScreenParams<MainTabParamList>;
+  Search: undefined;
+};
 
-export type FlashcardsStackScreenProps<
-  T extends keyof FlashcardsStackParamList,
-> = NativeStackScreenProps<FlashcardsStackParamList, T>;
+// Screen Props Types
+export type AuthStackScreenProps<T extends keyof AuthStackParamList> = NativeStackScreenProps<
+  AuthStackParamList,
+  T
+>;
 
-export type NotesStackScreenProps<T extends keyof NotesStackParamList> =
-  NativeStackScreenProps<NotesStackParamList, T>;
+export type MainTabScreenProps<T extends keyof MainTabParamList> = CompositeScreenProps<
+  BottomTabScreenProps<MainTabParamList, T>,
+  NativeStackScreenProps<RootStackParamList>
+>;
 
-// Declare global navigation types
+export type FlashcardsScreenProps<T extends keyof FlashcardsStackParamList> = CompositeScreenProps<
+  NativeStackScreenProps<FlashcardsStackParamList, T>,
+  MainTabScreenProps<'Flashcards'>
+>;
+
+export type NotesScreenProps<T extends keyof NotesStackParamList> = CompositeScreenProps<
+  NativeStackScreenProps<NotesStackParamList, T>,
+  MainTabScreenProps<'Notes'>
+>;
+
+export type CalendarScreenProps<T extends keyof CalendarStackParamList> = CompositeScreenProps<
+  NativeStackScreenProps<CalendarStackParamList, T>,
+  MainTabScreenProps<'Calendar'>
+>;
+
+export type ProfileScreenProps<T extends keyof ProfileStackParamList> = CompositeScreenProps<
+  NativeStackScreenProps<ProfileStackParamList, T>,
+  MainTabScreenProps<'Profile'>
+>;
+
+// Declare global types for navigation
+
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace ReactNavigation {
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     interface RootParamList extends RootStackParamList {}
   }
 }

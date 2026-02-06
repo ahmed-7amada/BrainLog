@@ -1,24 +1,54 @@
 /**
  * Voice Note Model
- * Represents audio recording with attachment information
+ * Represents audio recording (FR-013)
  */
+
+import type { SyncState } from './SyncState';
+
+export type AttachmentType = 'flashcard' | 'note' | 'dailyLog' | 'standalone';
 
 export interface VoiceNote {
   id: string;
-  user_id: string;
-  title?: string;
-  duration_seconds: number;
-
-  // External storage reference (Google Drive)
-  google_drive_file_id: string;
-  google_drive_url: string;
-
-  // Attachment information
-  attachment_type: VoiceNoteAttachmentType;
-  attached_item_id?: string; // ID of flashcard, note, or daily log
-
+  userId: string;
+  title: string;
+  durationSeconds: number;
+  localFilePath?: string; // Local file path for playback before upload
+  googleDriveFileId: string;
+  googleDriveUrl: string;
+  attachmentType?: AttachmentType;
+  attachedToId?: string;
   tags: string[];
-  created_at: number; // Timestamp
+  createdAt: number;
+  updatedAt?: number;
+
+  // Feature 003: Sync and upload metadata
+  syncState?: SyncState;
+  uploadTaskId?: string;
+  _optimistic?: boolean;
 }
 
-export type VoiceNoteAttachmentType = 'flashcard' | 'note' | 'dailyLog' | 'standalone';
+export interface CreateVoiceNoteInput {
+  userId: string;
+  title: string;
+  durationSeconds: number;
+  googleDriveFileId: string;
+  googleDriveUrl: string;
+  attachmentType?: AttachmentType;
+  attachedToId?: string;
+  tags?: string[];
+}
+
+export const createVoiceNote = (input: CreateVoiceNoteInput): VoiceNote => ({
+  id: generateId(),
+  ...input,
+  tags: input.tags || [],
+  createdAt: Date.now(),
+});
+
+const generateId = (): string => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};

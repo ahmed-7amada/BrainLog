@@ -3,40 +3,62 @@
  * Manages authentication state
  */
 
-import {StateCreator} from 'zustand';
-import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import { StateCreator } from 'zustand';
+import type { User } from '../../models/User';
 
 export interface AuthSlice {
-  user: FirebaseAuthTypes.User | null;
-  isAuthenticated: boolean;
+  // State
+  user: User | null;
   isLoading: boolean;
+  isAuthenticated: boolean;
+  error: string | null;
 
   // Actions
-  setUser: (user: FirebaseAuthTypes.User | null) => void;
+  setUser: (user: User | null) => void;
   setLoading: (loading: boolean) => void;
-  clearAuth: () => void;
+  setError: (error: string | null) => void;
+  updateUser: (updates: Partial<User>) => void;
+  logout: () => void;
 }
 
-export const createAuthSlice: StateCreator<AuthSlice> = set => ({
+export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => ({
+  // Initial state
   user: null,
+  isLoading: true,
   isAuthenticated: false,
-  isLoading: false,
+  error: null,
 
+  // Actions
   setUser: user =>
     set({
       user,
       isAuthenticated: user !== null,
+      isLoading: false,
+      error: null,
     }),
 
-  setLoading: loading =>
-    set({
-      isLoading: loading,
-    }),
+  setLoading: isLoading => set({ isLoading }),
 
-  clearAuth: () =>
+  setError: error => set({ error, isLoading: false }),
+
+  updateUser: updates => {
+    const currentUser = get().user;
+    if (currentUser) {
+      set({
+        user: {
+          ...currentUser,
+          ...updates,
+          updatedAt: Date.now(),
+        },
+      });
+    }
+  },
+
+  logout: () =>
     set({
       user: null,
       isAuthenticated: false,
       isLoading: false,
+      error: null,
     }),
 });

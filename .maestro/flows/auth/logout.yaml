@@ -1,0 +1,24 @@
+# Logout Flow
+# Tests user logout functionality
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Profile tab
+- tapOn:
+    text: "Profile"
+
+- waitForAnimationToEnd
+
+# Tap logout button
+- tapOn:
+    id: "profile_button_logout"
+
+- waitForAnimationToEnd
+
+# Should return to login screen
+- assertVisible:
+    id: "login_text_title"
+    timeout: 5000

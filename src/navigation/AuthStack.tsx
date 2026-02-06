@@ -1,20 +1,17 @@
 /**
- * Auth Stack Navigator
- * Navigation for unauthenticated users
+ * Authentication Stack Navigator
  */
 
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {AuthStackParamList} from './types';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import type { AuthStackParamList } from './types';
 
-// Placeholder screen - will be implemented in Phase 3
-const LoginScreen = () => {
-  return null; // TODO: Implement in Phase 3
-};
+// Screens will be imported here
+import LoginScreen from '../screens/auth/LoginScreen';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
-export const AuthStack = () => {
+const AuthStack: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -25,3 +22,5 @@ export const AuthStack = () => {
     </Stack.Navigator>
   );
 };
+
+export default AuthStack;

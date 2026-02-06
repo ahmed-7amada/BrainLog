@@ -1,0 +1,20 @@
+# Note List Flow
+# Tests note list screen functionality
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Notes tab
+- tapOn:
+    text: "Notes"
+- waitForAnimationToEnd
+
+# Verify list is visible
+- assertVisible:
+    id: "noteList_list_notes"
+
+# Verify create button is visible
+- assertVisible:
+    id: "noteList_button_create"

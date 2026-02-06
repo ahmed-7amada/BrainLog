@@ -1,43 +1,107 @@
 /**
  * Settings Slice
- * Manages user settings and preferences
+ * Manages user settings and app preferences
  */
 
-import {StateCreator} from 'zustand';
-import {ThemeMode, WeekDay} from '@/models/UserSettings';
+import { StateCreator } from 'zustand';
+import type { UserSettings, Theme } from '../../models/UserSettings';
 
 export interface SettingsSlice {
-  theme: ThemeMode;
-  notificationsEnabled: boolean;
-  dailyReminderTime: string;
-  habitReminderTime: string;
-  weeklyReviewDay: WeekDay;
+  // State
+  settings: UserSettings | null;
+  systemColorScheme: 'light' | 'dark';
 
   // Actions
-  setTheme: (theme: ThemeMode) => void;
-  setNotificationsEnabled: (enabled: boolean) => void;
+  setSettings: (settings: UserSettings | null) => void;
+  updateSettings: (updates: Partial<UserSettings>) => void;
+  setTheme: (theme: Theme) => void;
+  toggleNotifications: () => void;
   setDailyReminderTime: (time: string) => void;
   setHabitReminderTime: (time: string) => void;
-  setWeeklyReviewDay: (day: WeekDay) => void;
-  loadSettings: (settings: Partial<SettingsSlice>) => void;
+  setSystemColorScheme: (scheme: 'light' | 'dark') => void;
+  clearSettings: () => void;
 }
 
-export const createSettingsSlice: StateCreator<SettingsSlice> = set => ({
-  theme: 'system',
-  notificationsEnabled: true,
-  dailyReminderTime: '09:00',
-  habitReminderTime: '20:00',
-  weeklyReviewDay: 'sunday',
+export const createSettingsSlice: StateCreator<SettingsSlice> = (set, _get) => ({
+  // Initial state
+  settings: null,
+  systemColorScheme: 'light',
 
-  setTheme: theme => set({theme}),
+  // Actions
+  setSettings: settings => set({ settings }),
 
-  setNotificationsEnabled: enabled => set({notificationsEnabled: enabled}),
+  updateSettings: updates =>
+    set(state => {
+      if (!state.settings) return state;
+      return {
+        settings: {
+          ...state.settings,
+          ...updates,
+          updatedAt: Date.now(),
+        },
+      };
+    }),
 
-  setDailyReminderTime: time => set({dailyReminderTime: time}),
+  setTheme: theme =>
+    set(state => {
+      if (!state.settings) return state;
+      return {
+        settings: {
+          ...state.settings,
+          theme,
+          updatedAt: Date.now(),
+        },
+      };
+    }),
 
-  setHabitReminderTime: time => set({habitReminderTime: time}),
+  toggleNotifications: () =>
+    set(state => {
+      if (!state.settings) return state;
+      return {
+        settings: {
+          ...state.settings,
+          notificationsEnabled: !state.settings.notificationsEnabled,
+          updatedAt: Date.now(),
+        },
+      };
+    }),
 
-  setWeeklyReviewDay: day => set({weeklyReviewDay: day}),
+  setDailyReminderTime: dailyReminderTime =>
+    set(state => {
+      if (!state.settings) return state;
+      return {
+        settings: {
+          ...state.settings,
+          dailyReminderTime,
+          updatedAt: Date.now(),
+        },
+      };
+    }),
 
-  loadSettings: settings => set(state => ({...state, ...settings})),
+  setHabitReminderTime: habitReminderTime =>
+    set(state => {
+      if (!state.settings) return state;
+      return {
+        settings: {
+          ...state.settings,
+          habitReminderTime,
+          updatedAt: Date.now(),
+        },
+      };
+    }),
+
+  setSystemColorScheme: systemColorScheme => set({ systemColorScheme }),
+
+  clearSettings: () => set({ settings: null }),
 });
+
+// Selectors
+export const selectEffectiveTheme = (state: SettingsSlice): 'light' | 'dark' => {
+  if (!state.settings) return state.systemColorScheme;
+
+  if (state.settings.theme === 'system') {
+    return state.systemColorScheme;
+  }
+
+  return state.settings.theme;
+};

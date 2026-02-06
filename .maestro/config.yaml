@@ -1,0 +1,24 @@
+# Maestro Global Configuration
+# BrainLog Android E2E Testing
+
+appId: com.brainlog
+
+# Global settings
+env:
+  APP_ID: com.brainlog
+  PLATFORM: android
+
+# Test execution settings
+flows:
+  # Default timeout for element visibility (milliseconds)
+  timeout: 10000
+
+# Output settings
+output:
+  format: junit
+  path: .maestro/reports
+
+# Screenshots on failure
+screenshots:
+  enabled: true
+  path: .maestro/screenshots

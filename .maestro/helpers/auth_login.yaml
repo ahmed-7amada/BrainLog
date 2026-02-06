@@ -1,0 +1,14 @@
+# Auth Login Helper
+# Reusable flow for authenticating before other tests
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Check if already logged in (dashboard visible)
+- runFlow:
+    when:
+      notVisible:
+        id: "dashboard_text_greeting"
+    file: ../flows/auth/login_success.yaml

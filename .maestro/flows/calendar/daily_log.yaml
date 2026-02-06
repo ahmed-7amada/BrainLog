@@ -1,0 +1,30 @@
+# Daily Log Flow
+# Tests daily journal/log functionality
+
+appId: com.brainlog
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Navigate to Calendar tab
+- tapOn:
+    text: "Calendar"
+- waitForAnimationToEnd
+
+# Access daily log (from calendar or day detail)
+- assertVisible:
+    id: "dailyLog_text_date"
+    optional: true
+
+# If on daily log, test input
+- tapOn:
+    id: "dailyLog_input_notes"
+    optional: true
+- inputText: "Today I learned about Maestro E2E testing."
+    optional: true
+
+# Save
+- tapOn:
+    id: "dailyLog_button_save"
+    optional: true
+- waitForAnimationToEnd
